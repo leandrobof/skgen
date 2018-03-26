@@ -226,6 +226,7 @@ else{
 					Atom.push_back(new Orbital_rel(n,l,n_ocup_2,1,Z,-Z*Z/(2.*n*n),t,N));
 					Atom.push_back(new Orbital_rel(n,l,n_ocup_1,-1,Z,-Z*Z/(2.*n*n),t,N));
 				    j++;
+
 					}
 
 				else{Atom.push_back(new Orbital_rel(n,l,n_ocup,1,Z,-Z*Z/(2.*n*n),t,N));}

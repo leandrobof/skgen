@@ -39,7 +39,7 @@ vector<Scf*> Atoms;
 
 
 ifstream file(argv[1]);
-string line;
+string line="";
 int i=0;
 while(line.find("Atoms")==-1){
 			  getline(file,line);
@@ -147,9 +147,7 @@ return 0;
 
 
 void read_table_opt(char* archivo,SKtable& sk){
-	int grid=0;
-	float tmax=0;
-	float tmin=0;
+
 	map<string,int> options;
 		  options["ngrid"]=1;
 		  options["rmax"]=2;
@@ -158,16 +156,17 @@ void read_table_opt(char* archivo,SKtable& sk){
 		  string st="";
 		  ifstream file(archivo);
 
-		  while(st.find("TableOption")==-1){
+		  while(st.find("TableOption")!=-1){
 			  getline(file,st,'{');
 		  }
+		  if(st.find("TableOption")!=-1){
 		  vector<const char*> s;
 		  char str[250] ;
 		  file.get(str,250,'}');
 		  char * pch;
-			  pch = strtok (str,"{ ,.-\n");
+			  pch = strtok (str,"{ ,-\n");
 			  while (pch != NULL){
-				  pch = strtok (NULL, " ,.-=\n");
+				  pch = strtok (NULL, " ,-=\n");
 				  s.push_back(pch);
 			  }
 
@@ -181,7 +180,7 @@ void read_table_opt(char* archivo,SKtable& sk){
 				  }
 
 			  }
-
+		  }
 
 		file.close();
 };

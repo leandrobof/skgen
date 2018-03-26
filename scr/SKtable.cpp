@@ -93,8 +93,9 @@ void SKtable::run( Orbital_spline **A, Orbital_spline **B,Potential_spline &Veff
 	salida2<<"12.01, 19*0.0"<<endl;
 
 	int j=0;
+
 	while(step*(1+j)<rmin){
-		salida2<<"20*1.0,"<<endl;
+		salida2<<"20*0.0,"<<endl;
 	    j++;
 	}
 
