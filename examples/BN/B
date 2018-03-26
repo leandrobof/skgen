@@ -1,0 +1,5 @@
+GGA=True
+restart=True
+z=5
+sk_orb=2s 2p 0
+config=1s2 2s2 2p1
