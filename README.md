@@ -2,7 +2,7 @@
 
 Requerimientos:
 
-*gsl:Libreria numerica para C. 
+*gsl:Libreria numerica para C. Se puede instalar desde repositorios de ubuntu.
 
 *Libxc:Libreria de funcionales http://octopus-code.org/wiki/Libxc
 
