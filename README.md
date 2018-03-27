@@ -17,7 +17,7 @@ gsl llama a BLAS, en mi configuracion uso openblas,hay que modificar eso en el m
 
 Correr:
 
-Es necesario un archivo donde estan los parametros para las tablas sk (paramsk)y luego archivos individuales para cada atomo que aparece en las tablas.
+Es necesario un archivo donde estan los parametros para las tablas sk y luego archivos individuales para cada atomo que aparece en las tablas.
 
 
 Para correr :  ./skgen archivo
