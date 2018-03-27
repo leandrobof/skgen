@@ -23,18 +23,13 @@ paramsk:
 
 Atoms
 
-atomo1   basis={.. .. ..}   dens={.. .. ..}
-
-atomo1   basis={.. .. ..}   dens={.. .. ..}
-.
-
-.
-
-.
-
-atomoN   basis={.. .. ..}   dens={.. .. ..}
-
-/
+atomo1   basis={.. .. ..}   dens={.. .. ..}\n
+atomo1   basis={.. .. ..}   dens={.. .. ..}\n
+.\n
+.\n
+.\n
+atomoN   basis={.. .. ..}   dens={.. .. ..}\n
+/\n
 
 Cada atomox es el nombre archivo (en general  el simbolo del elemento) ,el segmento " basis={W a r0} " son los parametros de confinamiento para la base (afecta S y H), "dens" para el confinamiento de la densidad (afecta solo H).Tanto basis como dens puede no estar presente, si dens no esta presente los parametros para la densidad son iguales a los de basis, si basis no esta presente el confinamiento es igual a {0 0 0}.
 Importante no dejar lineas vacias entre atomoN y '/', ni entre atomos.
