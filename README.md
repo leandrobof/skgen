@@ -8,7 +8,7 @@ Requerimientos:
 
 *boost: (se incluye algunos headers en la carpeta include,los necesarios para compilar y correr)
 
-*dftb+ y dptools.
+*dftb+ y dptools. https://www.dftbplus.org/
 
 Compilacion:
 
@@ -22,12 +22,12 @@ Es necesario un archivo donde estan los parametros para las tablas sk (paramsk)y
 paramsk:
 
 Atoms
-atomo1 basis={.. .. ..} dens={.. .. ..}
-atomo1 basis={.. .. ..} dens={.. .. ..}
+atomo1   basis={.. .. ..}   dens={.. .. ..}
+atomo1   basis={.. .. ..}   dens={.. .. ..}
 .
 .
 .
-atomoN basis={.. .. ..} dens={.. .. ..}
+atomoN   basis={.. .. ..}   dens={.. .. ..}
 /
 
 Cada atomox es el nombre archivo (en general  el simbolo del elemento) ,el segmento " basis={W a r0} " son los parametros de confinamiento para la base (afecta S y H), "dens" para el confinamiento de la densidad (afecta solo H).Tanto basis como dens puede no estar presente, si dens no esta presente los parametros para la densidad son iguales a los de basis, si basis no esta presente el confinamiento es igual a {0 0 0}.
@@ -36,9 +36,13 @@ Importante no dejar lineas vacias entre atomoN y '/', ni entre atomos.
 De forma optional se pueden especificar parametros para la construccion de las tablas, con el bloque
 
 TableOption={
+
 rmin=
+
 rmax=
+
 step=              
+
 ngrid=             numero de puntos en la grilla (numero entero).
 
 }
@@ -52,11 +56,16 @@ atomox:
 
 
 Relativistic=
+
 GGA=
+
 restart=
 save= 
+
 z=
+
 sk_orb=                     Orbitales s p d en ese orden,con los que se calculara las tablas. En caso de que no se necesite algun momento angular reemplazar por 0.
+
 config=
 
 Son necesarias para poder correr z,sk_orb y config.
