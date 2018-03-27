@@ -22,7 +22,6 @@ Es necesario un archivo donde estan los parametros para las tablas sk (paramsk)y
 paramsk:
 
 Atoms
-
 atomo1   basis={.. .. ..}   dens={.. .. ..}
 atomo2   basis={.. .. ..}   dens={.. .. ..}
 .
