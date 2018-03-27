@@ -15,6 +15,7 @@
 #include <string.h>
 
 using namespace std;
+using namespace boost;
 
 
 //double Hubbard(Scf &a,vector<Orbital*> &b,const int &c );
@@ -156,26 +157,28 @@ void read_table_opt(char* archivo,SKtable& sk){
 		  string st="";
 		  ifstream file(archivo);
 
-		  while(st.find("TableOption")!=-1){
-			  getline(file,st,'{');
-		  }
-		  if(st.find("TableOption")!=-1){
-		  vector<const char*> s;
-		  char str[250] ;
-		  file.get(str,250,'}');
-		  char * pch;
-			  pch = strtok (str,"{ ,-\n");
-			  while (pch != NULL){
-				  pch = strtok (NULL, " ,-=\n");
-				  s.push_back(pch);
-			  }
+		  while( getline(file,st,'{') and st.find("TableOption")==-1){}
 
-			  for(int i=0;i<s.size()-1;i++){
-				  switch (options[string(s[i])]){
-				  case 1:sk.set_grid(atoi(s[i+1]));break;
-				  case 2:sk.set_rmax(atof(s[i+1]));break;
-				  case 3:sk.set_rmin(atof(s[i+1]));break;
-				  case 4:sk.set_step(atof(s[i+1]));break;
+		  if(st.find("TableOption")!=-1){
+		  vector<string> s;
+
+		  char str[250];
+		  file.get(str,250,'}');
+
+		  string line(str);
+
+		  char_separator<char> sep("=, '\n");
+		  tokenizer<char_separator<char> > tokens(line, sep);
+		  for(tokenizer<char_separator<char> >::iterator beg=tokens.begin(); beg!=tokens.end();++beg){
+			  s.push_back(*beg) ;
+		  }
+
+			  for(int i=0;i<s.size();i++){
+				  switch (options[s[i]]){
+				  case 1:sk.set_grid(atoi(s[i+1].c_str()));break;
+				  case 2:sk.set_rmax(atof(s[i+1].c_str()));break;
+				  case 3:sk.set_rmin(atof(s[i+1].c_str()));break;
+				  case 4:sk.set_step(atof(s[i+1].c_str()));break;
 				  default:break;
 				  }
 
