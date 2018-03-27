@@ -2,7 +2,7 @@ XCDIR=/opt/etsf
 INCLDIR=../include
 
 all: main2.o Orbital.o Func.o xc_potential.o hartree.o Poisson.o Integrand.o gauss.o scf.o SKtable.o
-	g++ main2.o scf.o Orbital.o Func.o xc_potential.o hartree.o Poisson.o Integrand.o gauss.o SKtable.o  -o   atomdft -L$(XCDIR)/lib -lgsl -lopenblas -lm -lxc -std=c++11
+	g++ main2.o scf.o Orbital.o Func.o xc_potential.o hartree.o Poisson.o Integrand.o gauss.o SKtable.o  -o   skgen -L$(XCDIR)/lib -lgsl -lopenblas -lm -lxc -std=c++11
 
 main2.o: main2.cpp $(INCLDIR)/Orbital.h
 	g++  main2.cpp -c -I$(INCLDIR) -I$(XCDIR)/include -std=c++11
