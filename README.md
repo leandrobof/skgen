@@ -22,12 +22,15 @@ Es necesario un archivo donde estan los parametros para las tablas sk (paramsk)y
 paramsk:
 
 Atoms
+
 atomo1   basis={.. .. ..}   dens={.. .. ..}
+
 atomo2   basis={.. .. ..}   dens={.. .. ..}
 .
 .
 .
 atomoN   basis={.. .. ..}   dens={.. .. ..}
+
 /
 
 Cada atomox es el nombre archivo (en general  el simbolo del elemento) ,el segmento " basis={W a r0} " son los parametros de confinamiento para la base (afecta S y H), "dens" para el confinamiento de la densidad (afecta solo H).Tanto basis como dens puede no estar presente, si dens no esta presente los parametros para la densidad son iguales a los de basis, si basis no esta presente el confinamiento es igual a {0 0 0}.
