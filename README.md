@@ -25,7 +25,7 @@ Para correr :  ./skgen archivo
 
 Ejemplos:
 Crear archivo skf y comparar con bandas de DFT (QE).
-Para graficar bandas es necesario dftb+ y dptools. Reemplazar en run.sh donde se encuentre el ejecutable de dftb+
+Para graficar bandas es necesario dftb+ y dptools. Reemplazar en run.sh donde se encuentre el ejecutable de dftb+.
 
 BN:
 
