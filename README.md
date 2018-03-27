@@ -24,7 +24,8 @@ paramsk:
 Atoms
 
 atomo1   basis={.. .. ..}   dens={.. .. ..}
-atomo1   basis={.. .. ..}   dens={.. .. ..}
+
+atomo2   basis={.. .. ..}   dens={.. .. ..}
 .
 .
 .
