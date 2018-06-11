@@ -12,10 +12,16 @@ Requerimientos:
 
 Compilacion:
 
+Ir a la carpeta scr,ahi conviene crear carpeta build correr configure y make ahi dentro
+
 mkdir build
+
 cd build
+
 ../configure
+
 make
+
 make install
 
 Correr:
