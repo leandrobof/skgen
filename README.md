@@ -6,7 +6,7 @@ Requerimientos:
 
 *Libxc:Libreria de funcionales http://octopus-code.org/wiki/Libxc
 
-*boost: (se incluye algunos headers en la carpeta include,los necesarios para compilar y correr)
+*boost: 
 
 *dftb+ y dptools. https://www.dftbplus.org/
 
@@ -20,7 +20,7 @@ Correr:
 Es necesario un archivo donde estan los parametros para las tablas sk y luego archivos individuales para cada atomo que aparece en las tablas.
 
 
-Para correr :  ./skgen archivo
+Para correr :  skgen archivo
 
 
 Ejemplos:
@@ -29,13 +29,13 @@ Para graficar bandas es necesario dftb+ y dptools. Reemplazar en run.sh donde se
 
 BN:
 
-../../scr/skgen test
+skgen test
 
 Para graficar: bash run.sh
 
 W:
 
-../../scr/skgen test
+skgen test
 
 Para graficar: bash run.sh
 
