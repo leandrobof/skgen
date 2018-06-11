@@ -20,7 +20,7 @@ AC_CHECK_HEADERS([stdlib.h string.h])
 AX_BOOST_BASE([1.53],,[AC_MSG_ERROR([skgen needs Boost, but it was not found in your system])])
 
 export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:"/opt/etsf/lib/pkgconfig/"
-PKG_CHECK_MODULES([XC], [libxc])
+PKG_CHECK_MODULES([XC], [libxc <= 3.0.0])
 PKG_CHECK_MODULES([GSL], [gsl])
 # Checks for typedefs, structures, and compiler characteristics.
 AC_CHECK_HEADER_STDBOOL
