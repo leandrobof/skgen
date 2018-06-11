@@ -45,7 +45,7 @@ int i=0;
 while(line.find("Atoms")==-1){
 			  getline(file,line);
 		  }
-while(getline(file,line)!=NULL and line.find("/")==-1 ){
+while(getline(file,line) and line.find("/")==-1 ){
 	double param_dens[3]={0,0,0};
 	double param_basis[3]={0,0,0};
 

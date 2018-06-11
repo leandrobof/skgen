@@ -393,11 +393,16 @@ void Scf::run(double w,double al,double ro,double alf){
 	}
 	//***Se imprime  Rln de todos los orbitales en archivo radial.txt
     cout<<endl;
-	ofstream salida("radial2.txt");
+	ofstream salida(prefix+".bas");
+	salida<<N<<endl;
 	for(int i=0;i<N;i++){
 		salida<<exp(t[i])/Z<<"   ";
-		for(int j=0;j<Atom.size();j++){
-			salida<<Atom[j]->operator()(i)<<"   ";
+		for(int j=0;j<3;j++){
+			if(index.count(SK[j])>0){
+				salida<<Atom[index[SK[j]]]->operator()(i)<<"   ";}
+			else {
+				salida<<"0 ";
+			}
 		}
 
 		salida<<endl;
@@ -510,7 +515,7 @@ void Scf::readpot(){
 }
 
 void Scf::savepot(){
-	ofstream pot_file(prefix+".pot");
+        ofstream pot_file(prefix+".pot");
 	for (int i=0;i<Atom.size();i++){
 			pot_file<<Atom[i]->energy()<<endl;
 		}
