@@ -12,8 +12,11 @@ Requerimientos:
 
 Compilacion:
 
-Ir a la carpeta scr/ y modificar el makefile, donde dice XCDIR escribir la direccion donde se encuentra la libreria LibXC.
-gsl llama a BLAS, en mi configuracion uso openblas,hay que modificar eso en el makefile.
+mkdir build
+cd build
+../configure
+make
+make install
 
 Correr:
 
