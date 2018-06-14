@@ -104,7 +104,7 @@ public:
      * @param e    array donde se guardan  los autovalores.
      * @param nocup
      */
-    void energy(double *e,double *nocup);
+    void energy(vector<double> &e,double *nocup);
 
     /**
          * Obtiene array de Orbitales_splines.En el caso Relativista devuelve un orbital promediado

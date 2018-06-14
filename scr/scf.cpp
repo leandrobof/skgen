@@ -418,7 +418,7 @@ void Scf::run(double w,double al,double ro,double alf){
 	delete [] e2;
 
 }
-void Scf::energy(double *e,double *ocupation){
+void Scf::energy(vector<double> &e,double *ocupation){
     int l;
 	if(Relativistic==false){
 		for(int i=0;i<3;i++){
@@ -455,7 +455,7 @@ void Scf::energy(double *e,double *ocupation){
 void Scf::orbital(Orbital_spline **C){
 	int l;
 	if (Relativistic==true){
-		double e[3];
+		vector<double> e={0,0,0};
 		double nocup[3];
 		energy(e,nocup);
 		for(int i=0;i<3;i++){

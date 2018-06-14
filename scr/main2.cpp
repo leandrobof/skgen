@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "toml.h"
 
 using namespace std;
 using namespace boost;
@@ -22,13 +23,21 @@ using namespace boost;
 
 void read_table_opt(char* archivo,SKtable& sk);
 
+struct atom{
+	vector<vector<double>> param_dens;
+	vector<vector<double>> param_basis;
+	vector<string> symbol;
+	vector<vector<double>> e;
+	vector<vector<double>> U;
+	};
+atom read_table_atom(char* archivo);
 int main(int argc,char *argv[]){
 
 
 vector<string> simbolo;
-vector<double*> e;
+vector<vector<double>> e;
 vector<double*> ocupation;
-vector<double*> U;
+vector<vector<double>> U;
 
 vector<Potential_spline*> Veff0;
 vector<Potential_spline*> Veff;
@@ -39,49 +48,22 @@ vector<Orbital_spline **> A;
 vector<Scf*> Atoms;
 
 
-ifstream file(argv[1]);
-string line="";
-int i=0;
-while(line.find("Atoms")==-1){
-			  getline(file,line);
-		  }
-while(getline(file,line) and line.find("/")==-1 ){
-	double param_dens[3]={0,0,0};
-	double param_basis[3]={0,0,0};
+
+
+
+
+
 
 //***Lee  Atomo el archivo, y los parametros de confinamiento
-
-	string s=line.substr(line.find_first_not_of(" "));
-	string archivo=s.substr(0,s.find(" "));
-	simbolo.push_back(archivo);
-
-	if(line.find("basis")!=-1){
-		string basis=line.substr(line.find("basis"));
-		basis=basis.substr(basis.find("{")+1,basis.find("}")-basis.find("{")-1);
-		istringstream b(basis);
-		b>>param_basis[0]>>param_basis[1]>>param_basis[2];
-
-
-	}
-
-
-	for (int j=0;j<3;j++){
-		param_dens[j]=param_basis[j];
-	}
-
-	if(line.find("dens")!=-1){
-		string dens=line.substr(line.find("dens"));
-		dens=dens.substr(dens.find("{")+1,dens.find("}")-dens.find("{")-1);
-		istringstream d(dens);
-		d>>param_dens[0]>>param_dens[1]>>param_dens[2];
-	}
+atom natom=read_table_atom(argv[1]);
+simbolo=natom.symbol;
 
 //********************************************
-
+for(int i=0;i<simbolo.size();i++){
 	A.push_back(new Orbital_spline* [3] {});
-	e.push_back(new double[3]);
+	e.push_back({0,0,0});
 	ocupation.push_back(new double[3]);
-	U.push_back(new double[3]);
+	U.push_back({0.,0.,0.});
 	Veff0.push_back(new Potential_spline);
 	Veff.push_back(new Potential_spline);
 	vconf.push_back(new Potential_spline);
@@ -91,15 +73,24 @@ while(getline(file,line) and line.find("/")==-1 ){
     Atoms[i]->run(0,1,1,0.2);
     Atoms[i]->energy(e[i],ocupation[i]);
 // Corre  confinamiento densidad y obtienen pot.
-    Atoms[i]->run(param_dens[0],param_dens[1],param_dens[2],0.2);
+    Atoms[i]->run(natom.param_dens[i][0],natom.param_dens[i][1],natom.param_dens[i][2],0.2);
     Atoms[i]->Veff_noconf(*(Veff0[i]));
 // Corre confinamientos bases y obtiene bases y potenciales.
-    Atoms[i]->run(param_basis[0],param_basis[1],param_basis[2],0.2);
+    Atoms[i]->run(natom.param_basis[i][0],natom.param_basis[i][1],natom.param_basis[i][2],0.2);
 	Atoms[i]->orbital(A[i]);
 	Atoms[i]->Vconf(*(vconf[i]));
 	Atoms[i]->Veff_noconf(*(Veff[i]));
-
-	i++;
+//Remplaza valores e[] y U[] si es necesario
+	for (int j=0;j<3;j++){
+		if (natom.U[i][j] >= 0){
+			U[i][j]=natom.U[i][j];
+		}
+		if (natom.e[i][j] <= 2.){
+			e[i][j]=natom.e[i][j];
+		}
+					
+	}
+    
 }
 
 cout<<"Calculating skf files"<<endl;
@@ -133,12 +124,11 @@ for (int i=0;i<Atoms.size();i++){
     delete Veff[i];
     delete vconf[i];
     delete Veff0[i];
-    delete [] e[i];
     delete [] ocupation[i];
-    delete [] U[i];
+
 
 }
-file.close();
+
 
 //*******************
 return 0;
@@ -148,44 +138,107 @@ return 0;
 
 
 void read_table_opt(char* archivo,SKtable& sk){
+	ifstream entrada(archivo);
+		
+	toml::ParseResult pr = toml::parse(entrada);
+	toml::Value v  = pr.value;
+    //Parseo de opciones
+	if (!pr.valid()) {
+	    cout << pr.errorReason << endl;
+	}
+	toml::Value* x = v.find("TableOptions.ngrid");
+	if (x and x->is<int>()){
+		sk.set_grid(x->as<int>());
+	}
+	
+	x=v.find("TableOptions.rmax");	
+	if (x and x->is<double>()){
+		sk.set_rmax(x->as<double>());
+	}
+	
+    x=v.find("TableOptions.rmin");	
+	if (x and x->is<double>()){
+		sk.set_rmin(x->as<double>());
+	}
+    
+    x=v.find("TableOptions.step");	
+	if (x and x->is<double>()){
+		sk.set_step(x->as<double>());
+	}
+	entrada.close();
+}	
+atom read_table_atom(char* archivo)  {
+    //Parseo de atomos
+    ifstream entrada(archivo);
+    toml::ParseResult pr = toml::parse(entrada);
+	toml::Value v  = pr.value;
+    //Parseo de opciones
+	if (!pr.valid()) {
+	    cout << pr.errorReason << endl;
+	}
+    atom atparam;
+    const toml::Value* z = v.find("TableOptions.Atoms");
+    const toml::Array& ar = z->as<toml::Array>();
+	for (const toml::Value& v : ar){
+		atparam.symbol.push_back(v.get<string>("element"));
+				
+		vector<double> bas={0,0,0};
+		vector<double> dens={0,0,0};
+		vector<double> Uparse={0.,0.,0.};
+		vector<double> eparse={2.1,2.1,2.1};
+		
+		z=v.find("basis");
+		if(z and z->is<vector<double>>()){
+			bas=z->as<vector<double>>();
+		}
+		atparam.param_basis.push_back(bas);
+		
+		z=v.find("dens");
+		if(z and z->is<vector<double>>()){
+			 dens=z->as<vector<double>>();
+		}
+		else{dens=bas;} 
+		atparam.param_dens.push_back(dens);
+		
+		z=v.find("Ud");
+		if(z and z->is<double>()){
+			 Uparse[2]=z->as<double>();
+		}
+		
+		z=v.find("Up");
+		if(z and z->is<double>()){
+			 Uparse[1]=z->as<double>();
+		}
+		
+		z=v.find("Us");
+		if(z and z->is<double>()){
+			 Uparse[0]=z->as<double>();
+		}
+		
+		z=v.find("ed");
+		if(z and z->is<double>()){
+			 eparse[2]=z->as<double>();
+		}
+		
+		z=v.find("ep");
+		if(z and z->is<double>()){
+			 eparse[1]=z->as<double>();
+		}
+		
+		z=v.find("es");
+		if(z and z->is<double>()){
+			 eparse[0]=z->as<double>();
+		}
+		
+		
+		atparam.U.push_back(Uparse);
+		atparam.e.push_back(eparse);
+		
+	}
+			  
 
-	map<string,int> options;
-		  options["ngrid"]=1;
-		  options["rmax"]=2;
-		  options["rmin"]=3;
-	      options["step"]=4;
-		  string st="";
-		  ifstream file(archivo);
-
-		  while( getline(file,st,'{') and st.find("TableOption")==-1){}
-
-		  if(st.find("TableOption")!=-1){
-		  vector<string> s;
-
-		  char str[250];
-		  file.get(str,250,'}');
-
-		  string line(str);
-
-		  char_separator<char> sep("=, '\n");
-		  tokenizer<char_separator<char> > tokens(line, sep);
-		  for(tokenizer<char_separator<char> >::iterator beg=tokens.begin(); beg!=tokens.end();++beg){
-			  s.push_back(*beg) ;
-		  }
-
-			  for(int i=0;i<s.size();i++){
-				  switch (options[s[i]]){
-				  case 1:sk.set_grid(atoi(s[i+1].c_str()));break;
-				  case 2:sk.set_rmax(atof(s[i+1].c_str()));break;
-				  case 3:sk.set_rmin(atof(s[i+1].c_str()));break;
-				  case 4:sk.set_step(atof(s[i+1].c_str()));break;
-				  default:break;
-				  }
-
-			  }
-		  }
-
-		file.close();
+	entrada.close();
+return atparam;
 };
 /*
 double Hubbard(Scf &a,vector<Orbital*> &b,const int &c ){
